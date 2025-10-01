@@ -20,39 +20,34 @@
 
 \section{ Research question}
 
-\noindent \textbf{Question.} Did the cash assistance delivered during the pandemic relax liquidity constraints and increase entry into entrepreneurship especially among workers who had just lost a job?
+\noindent \textbf{Question.} How does local dependence on anchor institutions shape the cyclical sensitivity of small-town economies, particularly in the case of U.S. college towns?
 
+\noindent\textbf{Context.} In the United States, universities increasingly function as ``anchor institutions,"\footnote{Large, place-bound employers whose spending and employment provide local economic stability \citep{Harker2024AnchorReliance,Saxenian1994RegionalAdvantage}.} especially in smaller metropolitan areas and college towns that rely on them for jobs, income, and a sizable share of local GDP. For instance, Ithaca, NY, ranks highest on the Philadelphia Fed’s Anchor Economy Reliance Index, reflecting the outsized role of Cornell University in its local economy \citep{Harker2024AnchorReliance}. College towns are distinctive because their economies revolve around universities: students and faculty sustain housing demand, local consumption, and services, and enrollments tend to rise countercyclically during recessions \citep{BoundTurner2007CohortCrowding}. Yet, despite extensive media coverage highlighting the fragility of these towns under college shutdowns or closures, rigorous evidence on their cyclical dynamics remains scarce.
 
-\medskip
-\noindent
-\textbf{Context}. Beginning in 2020 the United States saw a historic and persistent rise in new business applications, with a notable increase in filings likely to become employers. At the same time, households received large cash transfers through the Economic Impact Payment. Levine and Rubinstein develop a three-sector Roy model in which the choice to become an incorporated entrepreneur requires both ability and collateral, so liquidity binds on that margin; empirically, they show incorporated entrepreneurs are positively selected while other self-employment behaves differently. \footnote{Ross Levine and Yona Rubinstein, 2019. \textit{Selection into Entrepreneurship and Self-Employment}}. 
-
-\noindent \textbf{Importance and contribution.} This study asks whether pandemic cash injections nudged displaced workers toward incorporated entrepreneurship. We deliver a clear test of the liquidity channel by focusing on a single causal quantity, the interaction of recent job loss and local liquidity, and by linking CPS individual transitions to the contemporaneous surge in business applications (BFS). Thus, if liquidity eased binding constraints, entry should rise primarily into \textit{incorporated} self-employment, relative to \textit{unincorporated}, and most clearly among recent job losers. Pinning down this mechanism helps explain the post-2020 start-up boom and guides the design of emergency transfers and small-business policy in future downturns.
+\noindent\textbf{Contribution.} This project proposes to fill that gap by providing evidence on the stability–fragility tradeoff of university reliance in college towns. It quantifies how dependence on universities can cushion local downturns—through countercyclical enrollment and sustained payrolls, yet expose communities to outsized losses when campus presence is curtailed or institutions close. By clarifying these elasticities, the study informs local choices on higher-education funding, and diversification at a time when many places are doubling down on anchor-based development \citep{Harker2024AnchorReliance}.
 
 \section{ Economic framework and empirical design}
 
-\noindent \textbf{Economic environment.} Workers choose among paid jobs, incorporated self-employment, and unincorporated self-employment. Liquidity binds on the incorporated margin because start-ups need upfront capital; job loss lowers the opportunity cost of entry. The pandemic added cash transfers and employment swings shocks. The model predicts cash should raise entry into incorporated self-employment, especially for workers recently laid off.
+\noindent \textbf{Framework.} Agents include universities, students, local workers, and firms in non-tradable sectors (retail, housing, restaurants). In normal recessions, lower outside wages encourage enrollment growth, boosting local demand and stabilizing employment. By contrast, in college shutdowns, students are removed regardless of labor market conditions, exposing fragility. The key hypothesis is that university-dependent towns experience shallower downturns in normal recessions but sharper contractions when student presence suddenly vanishes.
 
-
-\noindent\textbf{Empirical design.} We test whether liquidity raises entrepreneurial entry among job-losers using two complementary models. First, with CPS data, we estimate a transition model for individuals not self-employed in $t\!-\!1$:
-\begin{equation*}
-	\Pr(E^{\mathrm{inc}}_{ist}=1)=\alpha_s+\tau_t+\beta\big(\text{JobLoss}_{it}\times \text{Liquidity}_{st}\big)+X_{ist}\gamma+\varepsilon_{ist}
-\end{equation*}
-where $E^{\mathrm{inc}}_{ist}$ is entry into \emph{incorporated} self-employment; $\beta>0$ implies cash waves boost entry for job-losers. Re-estimating with $E^{\mathrm{uninc}}_{ist}$ provides a placebo/contrast. Second, with BFS state series, we run an event-time design around payment dates:
-\begin{equation*}
-	\log Y_{st}=\alpha_s+\lambda_t+\sum_{k\neq -1}\delta_k\,\mathbf{1}\{t-t_0=k\}\times \text{Exposure}_s+u_{st}
-\end{equation*}
-with $Y_{st}$ the number of business applications likely to become employers. Identification rests on parallel trends for job-losers across states absent cash waves and the exogenous national timing of EIP; we include state and month fixed effects, check pre-trends and placebo dates.
+\noindent \textbf{Empirical design.} I will estimate:
+\begin{enumerate}
+	\item \textbf{Stabilizer effect (normal recessions).} Difference-in-differences comparing outcomes (employment, unemployment, sectoral payrolls, rents) in high- vs. low-university-dependent counties during recessions (2001, 2008–09). University dependence is defined by pre-period student share or payroll share.
+	\item \textbf{Fragility effect (shut-downs and closures).} Event study exploiting March 2020 shut-downs and heterogeneity in reopening modalities across universities. Outcomes include service-sector jobs, small-business survival, foot traffic, and housing markets.
+\end{enumerate}
+Identification relies on variation in pre-period university reliance, national enrollment shifts, and exogenous pandemic shut-down policies. Core assumption: absent university shocks, high- and low-dependence towns would have followed parallel trends.
 
 \section{ Data}
+\noindent The analysis combines public datasets: IPEDS (university enrollment, employment), BLS QCEW (county employment/payrolls), Census/ACS (population, income, student shares), and Zillow (housing prices/rents). University closure/reopening data.
 
-\noindent Data are public sources. Current Population Survey monthly microdata (state, class of worker, employment/separations) to build month-to-month transitions; Census Business Formation Statistics for state monthly series; IRS information on for EIP timing and exposure.
+
+
 
 
 
 \singlespacing
 \bibliographystyle{chicago}
-%\bibliography{humancapital,ihdp,productionfunctions,econometrics}
+\bibliography{public_library}
 
 \pagebreak
 \renewcommand*{\thepage}{A.\arabic{page}}
