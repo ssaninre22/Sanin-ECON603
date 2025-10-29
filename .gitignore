@@ -167,5 +167,5 @@ pythontex-files-*/
 **/data/
 **/trash/
 **/.Rproj.user/
-
+*.Rproj.user
 
