@@ -162,3 +162,10 @@ pythontex-files-*/
 
 ## Folders to ignore 
 ## Test
+
+# Other weird extension files
+**/data/
+**/trash/
+
+
+
