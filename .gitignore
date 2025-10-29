@@ -166,6 +166,6 @@ pythontex-files-*/
 # Other weird extension files
 **/data/
 **/trash/
-
+**/.Rproj.user/
 
 
