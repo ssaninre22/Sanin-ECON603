@@ -1,0 +1,460 @@
+% Project: `` Anchor institutions as macroeconomic stabilizers"
+% Section: Conclusion
+
+\newpage
+
+
+\section*{A1 - Tables}
+
+\begin{table}[H]
+	\centering
+	\footnotesize
+	\caption*{\textbf{Table A1}: Summary of Main Data Sources and Key Variables}
+	\label{tab:data_summary}
+	\begin{tabular}{p{3cm} p{3cm} p{5cm} p{4cm}}
+		\toprule
+		\textbf{Source} & \textbf{Coverage / Frequency} & \textbf{Main Variables Used} & \textbf{Notes / Potential Issues} \\ 
+		\midrule
+		\textbf{IPEDS (NCES)} & 1996–2023 (annual) & University enrollment (FTE), employment, payroll, sector (NAICS 61) & Missing reports for small institutions; lag in release of newest years. \\[0.3em]
+		\textbf{BLS QCEW} & 2000–2023 (monthly $\to$ aggregated quarterly/annual) & County employment and payrolls, by NAICS 44–45 (Retail), 71 (Arts/Entertainment), 72 (Accommodation/Food), 53 (Real Estate), total private & Consistent over time; limited disclosure for very small counties. \\[0.3em]
+		\textbf{BLS LAUS} & 1990–2023 (monthly) & County unemployment rate, labor force & Derived from CPS and UI records; small-sample volatility for rural counties. \\[0.3em]
+		\textbf{ACS / Decennial Census (U.S. Census Bureau)} & 2000–2023 (annual / decennial) & Population, income, education, housing tenure, student share & Sampling error for small counties; harmonization across decennial/ACS years. \\[0.3em]
+		\textbf{Zillow ZORI / FHFA HPI} & 2000–2023 (monthly/quarterly) & Rent index, housing prices & Missing for some non-metropolitan counties; coverage more complete post-2010. \\[0.3em]
+		\textbf{Philadelphia Fed Anchor Economy Initiative} & 2022 (cross-section) & Anchor Employment Share, Anchor Reliance Index & Benchmark for external validation of university dependence measures. \\
+		\bottomrule
+	\end{tabular}
+\end{table}
+
+\newpage
+\section*{A2 - Appendix model (very preliminary)}
+
+
+\subsection*{Overview and Timing}
+We study a small-open \textit{county} economy with two production sectors, tradables ($T$) and non-tradables ($N$), and a university sector that injects local demand. Time is discrete, $t=0,1,2,\dots$. Within each period:
+\begin{enumerate}
+	\item Aggregate shocks $(\varepsilon_t,\chi_t)$ and policy $s_t$ (aid/stipend) realize.
+	\item A young cohort draws idiosyncratic study costs and chooses \textit{Study} vs \textit{Work}; enrollment $S_t$ is determined.
+	\item Firms in $T$ and $N$ post vacancies $v_{s,t}$; matching occurs.
+	\item Wages are set by Nash bargaining; production and spending occur.
+\end{enumerate}
+A slow-moving county characteristic $x\in[0,1]$ captures \textit{university exposure}. The \textit{local presence} share of enrolled students is $\rho_t\in[0,1]$, potentially time-varying (e.g., collapses under remote instruction). A \textit{closure} shock $\chi_t\ge 0$ scales down local university demand more strongly in highly exposed places via $x^\psi$, $\psi\ge 1$.
+
+\subsection*{Households: Young Cohort and Enrollment (EV1–Logit)}
+A unit mass of workers supplies labor; a size-$\mu$ young cohort arrives each period. Let $\beta\in(0,1)$.
+
+\subsubsection*{Values from Work vs Study}
+A young agent comparing \textit{Study} vs \textit{Work} solves:
+\[
+V^S_t(\phi)=s_t-\phi+\beta\,\mathbb{E}_t[V^G_{t+1}],
+\qquad
+V^W_t=\max\{V^T_t,V^N_t\}.
+\]
+Here $s_t$ is net stipend/aid, $\phi$ is an idiosyncratic study cost, and $V^G_{t+1}$ is the graduate continuation value (with wage premium and/or job-finding advantage upon graduation). The sectoral work values (with search–matching) are
+\begin{align}
+	V^s_t
+	&= f_s(\theta_{s,t})\big(w_{s,t} + \beta\,\mathbb{E}_t[V^s_{t+1}]\big)
+	+ \big(1-f_s(\theta_{s,t})\big)\big(b + \beta\,\mathbb{E}_t[V^s_{t+1,\text{unemp}}]\big),\quad s\in\{T,N\},
+\end{align}
+where $f_s(\theta)$ is the job-finding probability, $\theta_{s,t}$ tightness, $w_{s,t}$ the wage, and $b$ the unemployment flow value. (In simulations we use a myopic proxy $V^W_t\approx f_s(\theta_{s,t})w_{s,t}+(1-f_s(\theta_{s,t}))\,b$.)
+
+\subsubsection*{Study Cost Distribution and Logit Cutoff}
+Let the idiosyncratic study cost be
+\[
+\phi=\bar\phi + \sigma_\phi\,\varepsilon,\qquad \varepsilon\sim \text{Type-I EV (Gumbel)},\ \ \sigma_\phi>0.
+\]
+Define the cutoff $\phi^\star_t$ by indifference $V^S_t(\phi^\star_t)=V^W_t$:
+\[
+\phi^\star_t=s_t+\beta\,\mathbb{E}_t[V^G_{t+1}]-V^W_t.
+\]
+With the EV1 distribution, the CDF is logistic: $F(\phi)=\Lambda\big((\phi-\bar\phi)/\sigma_\phi\big)$, $\Lambda(z)=e^z/(1+e^z)$. Hence enrollment (share of the young cohort) is
+\begin{equation}
+	S_t=\mu\,\Lambda\!\left(\frac{\phi^\star_t-\bar\phi}{\sigma_\phi}\right)=\mu\,\Lambda\!\left(\frac{s_t+\beta\,\mathbb{E}_t[V^G_{t+1}] - V^W_t - \bar\phi}{\sigma_\phi}\right).
+	\label{eq:logit_St_main}
+\end{equation}
+Elasticities (let $\lambda(z)\equiv \Lambda(z)(1-\Lambda(z))$):
+\begin{align}
+	\frac{\partial S_t}{\partial s_t}=\mu\,\frac{\lambda(\iota_t)}{\sigma_\phi},\qquad
+	\frac{\partial S_t}{\partial V^W_t}=-\mu\,\frac{\lambda(\iota_t)}{\sigma_\phi},\qquad
+	\iota_t\equiv\frac{\phi^\star_t-\bar\phi}{\sigma_\phi}.
+	\label{eq:logit_derivs}
+\end{align}
+When a recession lowers $V^W_t$, $S_t$ rises: enrollment is \textit{countercyclical}.
+
+\subsection*{University Spending with Exposure and Presence}
+The part of university spending that hits the local market is
+\begin{equation}
+	G_t(x)=x\,g_0 \;+\; x\,g_1\,\rho_t\,S_t \;-\; \chi_t\,x^\psi,\qquad \psi\ge 1,
+	\label{eq:G_def_main}
+\end{equation}
+with baseline operations $xg_0$, per-student local spend $xg_1\rho_t S_t$ (only locally present students matter), and closure hit $\chi_t x^\psi$.
+
+\subsection*{Goods Demand and Production}
+\subsubsection*{Tradables}
+County tradable sales respond to a national shock:
+\begin{equation}
+	Y_{T,t}=\bar Y_T+\beta_T\,\varepsilon_t,\qquad \beta_T>0.
+	\label{eq:YT_demand}
+\end{equation}
+With linear technology $Y_{T,t}=A_T L_{T,t}$ (absorbing hours/utilization), define $\phi_T\equiv 1/A_T$ and the \textit{sales-implied employment target}
+\begin{equation}
+	L_{T,t}^\ast=\phi_T\,Y_{T,t}.
+	\label{eq:LT_target}
+\end{equation}
+
+\subsubsection*{Non-tradables}
+Residents spend a fraction $\eta(x)\in(0,1)$ of labor income on $N$-goods; $\eta$ can rise with exposure $x$. With a near-sticky wage index $\bar w$,
+\begin{equation}
+	Y_{N,t}^d=\underbrace{\eta(x)\,\bar w\,(L_{T,t}+L_{N,t})}_{E_{N,t}^{\text{res}}} + G_t(x).
+	\label{eq:YN_demand}
+\end{equation}
+Linear technology $Y_{N,t}=A_N(x)\,L_{N,t}$, with $a(x)\equiv 1/A_N(x)$ the unit labor requirement (increasing in $x$ if services-intensity rises near universities). Solving the $N$ fixed point (combine $Y_{N,t}^d$ with $L_{N,t}=a(x)Y_{N,t}$) yields
+\begin{equation}
+	L_{N,t} = k(x)\,\eta(x)\,\bar w\,L_{T,t} + k(x)\,G_t(x),
+	\qquad
+	k(x)\equiv \frac{a(x)}{1-a(x)\,\eta(x)\,\bar w}\;>\;0.
+	\label{eq:LN_fixed_point}
+\end{equation}
+Hence total employment
+\begin{equation}
+	L_{E,t}\equiv L_{T,t}+L_{N,t}=\underbrace{\big(1+k(x)\eta(x)\bar w\big)}_{a_T(x)}\,L_{T,t}+k(x)\,G_t(x).
+	\label{eq:LE_total}
+\end{equation}
+
+\subsection*{Search–and–Matching Labor Markets}
+Each sector $s\in\{T,N\}$ has matching function
+\begin{equation}
+	M_s(U_{s,t},v_{s,t})=m_s U_{s,t}^{\alpha}\,v_{s,t}^{1-\alpha},\qquad \alpha\in(0,1),
+\end{equation}
+implying
+\begin{equation}
+	\theta_{s,t}\equiv \frac{v_{s,t}}{U_{s,t}},\qquad
+	f_s(\theta)=m_s\,\theta^{\,1-\alpha}\in(0,1],\qquad
+	q_s(\theta)=m_s\,\theta^{-\alpha}\in(0,1].
+	\label{eq:f_q_defs}
+\end{equation}
+Separations occur at $\delta_s\in(0,1)$; posting a vacancy costs $c_s>0$.
+
+\subsubsection*{Worker and Firm Values; Free Entry}
+Let $E_{s,t}$ and $U_{s,t}^{W}$ be the employed and unemployed worker values in sector $s$; let $J_{s,t}$ and $V_{s,t}$ be the filled-job and vacancy values to firms; $R'_{s,t}$ is revenue per worker (net of non-labor costs). Bellman equations:
+\begin{align}
+	E_{s,t} &= w_{s,t} + \beta\,\mathbb{E}_t\big[(1-\delta_s)E_{s,t+1}+\delta_s U^W_{s,t+1}\big],\\
+	U^W_{s,t} &= b + \beta\,\mathbb{E}_t\big[f_s(\theta_{s,t})E_{s,t+1} + (1-f_s(\theta_{s,t}))U^W_{s,t+1}\big],\\
+	J_{s,t} &= R'_{s,t} - w_{s,t} + \beta\,\mathbb{E}_t[(1-\delta_s)J_{s,t+1}],\\
+	V_{s,t} &= -c_s + \beta\,\mathbb{E}_t[q_s(\theta_{s,t})J_{s,t+1}].
+\end{align}
+Free entry, $V_{s,t}=0$, pins down tightness:
+\begin{equation}
+	c_s=\beta\,\mathbb{E}_t\!\big[q_s(\theta_{s,t})J_{s,t+1}\big].
+	\label{eq:free_entry}
+\end{equation}
+
+\subsubsection*{Wage Bargaining and Surplus Split}
+Nash bargaining with worker weight $\xi_s$ yields the standard surplus-sharing rule $(E_{s,t}-U^W_{s,t})=\frac{\xi_s}{1-\xi_s}J_{s,t}$ and the wage (recursive form):
+\begin{equation}
+	w_{s,t}=(1-\xi_s)b+\xi_s\Big(R'_{s,t}+\beta\,\mathbb{E}_t[(1-\delta_s)J_{s,t+1}] + c_s\,\theta_{s,t}\Big).
+	\label{eq:wage_rule}
+\end{equation}
+Equations \eqref{eq:free_entry} and \eqref{eq:wage_rule} collapse to a one-dimensional condition in $\theta_{s,t}$ given $R'_{s,t}$.
+
+\subsection*{Employment–Unemployment Dynamics (Stocks)}
+\label{subsec:stocks}
+Let $N_s$ be the sector labor force (exogenous and constant), so $N_s=L_{s,t}+U_{s,t}$. With separations and job-finding $f_s(\theta_{s,t})$:
+\begin{align}
+	L_{s,t+1} &=(1-\delta_s)L_{s,t} + f_s(\theta_{s,t})\,U_{s,t},
+	\label{eq:employment_stock}\\
+	U_{s,t+1} &=(1-f_s(\theta_{s,t}))U_{s,t} + \delta_s L_{s,t}.
+	\label{eq:unemployment_stock}
+\end{align}
+Realized hires are $H_{s,t}=f_s(\theta_{s,t})U_{s,t}$; the vacancy volume that rationalizes them is $v_{s,t}=H_{s,t}/q_s(\theta_{s,t})$.
+
+\subsection*{Aggregate Unemployment Rate and Steady State}
+\label{subsec:urate}
+Define $U_t=U_{T,t}+U_{N,t}$ and $L_t=L_{T,t}+L_{N,t}$. The unemployment rate is
+\begin{equation}
+	u_t=\frac{U_t}{N_T+N_N}.
+	\label{eq:urate_def}
+\end{equation}
+For a constant tightness $\theta_s^\ast$, the sectoral steady-state unemployment rate satisfies
+\begin{equation}
+	u_s^\ast=\frac{\delta_s}{\delta_s+f_s(\theta_s^\ast)}.
+	\label{eq:usteady}
+\end{equation}
+
+\subsection*{Production and ``Demand-Determined'' Employment (Targets \texorpdfstring{$\rightarrow$}{->} Stocks)}
+With linear technologies, define \textit{targets} $L_{T,t}^\ast=\phi_TY_{T,t}$ and $L_{N,t}^\ast=a(x)Y_{N,t}$ (where $Y_{N,t}$ solves the $N$-fixed-point via \eqref{eq:LN_fixed_point}). 
+
+\subsubsection*{Exact adjustment (benchmark)}
+Let $\Delta L_{s,t+1}\equiv L_{s,t+1}^\ast-(1-\delta_s)L_{s,t}$. If vacancies can be adjusted freely and matching is efficient, firms can choose $\theta_{s,t}$ and $v_{s,t}$ such that expected hires $H_{s,t}=q_s(\theta_{s,t})v_{s,t}$ hit the gap $\Delta L_{s,t+1}$. Then $L_{s,t+1}=L_{s,t+1}^\ast$ and, dropping the $+1$ index for notation,
+\begin{equation}
+	L_{T,t}=\phi_T Y_{T,t},\qquad L_{N,t}=a(x)Y_{N,t}.
+	\label{eq:LT_LN_equal}
+\end{equation}
+
+\subsubsection*{Partial adjustment (practical)}
+With vacancy installation frictions or bounded $q_s(\cdot)$, $L_{s,t}$ tracks $L_{s,t}^\ast$ via \eqref{eq:employment_stock}–\eqref{eq:unemployment_stock}. In that case,
+\begin{equation}
+	L_{T,t}\approx \phi_T Y_{T,t},\qquad L_{N,t}\approx a(x)Y_{N,t},
+	\label{eq:LT_LN_approx}
+\end{equation}
+where the approximation is accurate at quarterly frequency when $f_s(\theta)$ responds strongly to $R'_{s,t}$ through \eqref{eq:free_entry}–\eqref{eq:wage_rule}.
+
+\subsection*{Propositions (Employment/Unemployment with Exposure)}
+All statements below compare counties with identical primitives except exposure $x$ and the induced $k(x),\eta(x),a(x)$ and $\rho_t$.
+
+\subsubsection*{Proposition 1 (Baseline buffer, no closures)}
+If $\chi_t=0$ and $x>0$, then $G_t(x)\ge 0$ and from \eqref{eq:LN_fixed_point}–\eqref{eq:LE_total} county employment is (weakly) higher than at $x=0$. In steady state, the unemployment rate $u^\ast$ satisfies \eqref{eq:usteady} with higher $f_s(\theta^\ast)$ induced by larger $R'_N$ (via $G_t$), therefore $u^\ast(x)\le u^\ast(0)$.
+
+\textit{Sketch.} $G_t(x)=xg_0+xg_1\rho_t S_t\ge 0$. Then $L_{N,t}(x)-L_{N,t}(0)=k(x)G_t(x)\ge 0$ and $L_t=L_T+L_N$ rises. Free entry implies higher $J_{N,t+1}$ and hence higher $\theta_{N,t}$, raising $f_N$ and lowering steady unemployment.
+
+\subsubsection*{Proposition 2 (Resilience in standard recessions)}
+Suppose $\chi_t=0$ and enrollment is countercyclical: $\partial S_t/\partial(-\varepsilon_t)>0$. Then, holding $x$ fixed, the unemployment response to $\varepsilon_t$ is smaller (more resilient) at higher $x$:
+\[
+\frac{\partial u_t}{\partial \varepsilon_t}
+\;\approx\;
+\underbrace{\psi_T}_{>0}\,\phi_T\,\beta_T
+\;-\;
+\underbrace{\psi_N(x)}_{>0}\,k(x)\,x\,g_1\,\rho_t\,
+\frac{\mu\,\lambda(\iota_t)}{\sigma_\phi}
+\]
+where $\beta_T$ is the tradables demand loading from $Y_{T,t}=\bar Y_T+\beta_T\varepsilon_t$, $\phi_T$ maps $Y_T$ into the \textit{target} $L_T^\ast=\phi_T Y_T$, $k(x)$ is the local‐multiplier from the $N$ fixed point, $x g_1 \rho_t$ is local per-student spend, $\psi_T>0$ and $\psi_N(x)>0$ are reduced-form \textit{flow-to-stock loadings} that map an incremental job in $T$ (resp. incremental university-driven demand in $N$) into the contemporaneous change in the unemployment rate under the stock equations. They are increasing in job-finding $f_s(\theta_{s,t})$ and decreasing in separations $\delta_s$. 
+
+\noindent \textit{Intuition:} the first (positive) term is the direct tradables contraction, while the second (negative) term is the stabilizer: a recession lowers $V_t^W$, raises $S_t$ via the logit block, boosts $G_t$, and, through $k(x)$, supports $L_{N,t}$ and reduces $u_t$. Because that stabilizer scales with $x$ and with the logit slope $\lambda(\iota_t)$ (maximal near the indifferent margin), $\partial u_t/\partial \varepsilon_t$ is \textit{closer to zero} in more exposed counties.
+
+
+
+	
+	
+\subsubsection*{Proposition 3 (Closure-driven reversal)}
+If $\Delta\chi>0$ (closures) and $\psi\ge 1$, the difference in unemployment between high-$x$ and low-$x$ counties widens unfavorably (higher in high-$x$) when $x^\psi \Delta\chi$ dominates the stabilizing term $x g_1\rho_t \Delta S$. Formally, letting $\tau(x)$ denote the flagship–control unemployment gap over a window,
+\[
+\tau(x)\;\approx\; \underbrace{\Big(-k(x)\,x g_1\rho\,\frac{\partial S}{\partial(-\varepsilon)}\Delta(-\varepsilon)\Big)}_{\text{stabilizer}}
++\underbrace{\big(k(x)\,x^\psi \Delta\chi\big)}_{\text{closure hit}},
+\]
+which turns positive and steeper in $x$ when the closure hit is large and $\rho$ collapses.
+
+\subsection*{Mapping to the Empirical SDiD Estimand}
+Let $u^{\text{flag}}_t(x)$ be unemployment in a flagship-county with exposure $x$, and $u^{\text{ctrl}}_t$ in a matched control ($x\simeq 0$). The SDiD effect over a window $\mathcal T$ is
+\begin{equation}
+	\tau(x)\equiv \frac{1}{|\mathcal T|}\sum_{t\in\mathcal T}\Big(\Delta u^{\text{flag}}_t(x)-\Delta u^{\text{ctrl}}_t\Big).
+\end{equation}
+Linearizing \eqref{eq:LE_total}-\eqref{eq:urate_def} around the pre-period and substituting the logit elasticity \eqref{eq:logit_derivs} yields the sufficient-statistics mapping (signs as above):
+\begin{equation}
+	\boxed{\;
+		\tau(x)\ \approx\ -\,k(x)\,\underbrace{x g_1\rho}_{\text{per-student local spend}}\,
+		\underbrace{\frac{\partial S}{\partial(-\varepsilon)}}_{\text{logit: }\mu\lambda(\iota)/\sigma_\phi}\,
+		\Delta(-\varepsilon)
+		\;+\; k(x)\,x^\psi\,\Delta\chi\; }.
+	\label{eq:sdid_mapping}
+\end{equation}
+
+\subsection*{Deriving Demand-Determined Employment from Free Entry and Hiring}
+\label{subsec:derivation_targets}
+\paragraph{Step 1 (Targets).} With linear technologies, define $L^\ast_{T,t}=\phi_TY_{T,t}$, $L^\ast_{N,t}=a(x)Y_{N,t}$.
+
+\paragraph{Step 2 (Gap).} Given separations, to attain $L^\ast_{s,t+1}$ next period the net hires must satisfy
+\[
+\Delta L_{s,t+1}\equiv L^\ast_{s,t+1}-(1-\delta_s)L_{s,t}.
+\]
+
+\paragraph{Step 3 (Free entry $\Rightarrow$ tightness).} From \eqref{eq:free_entry}, $c_s=\beta q_s(\theta_{s,t})\,\mathbb{E}_t[J_{s,t+1}]$. Since $J_{s,t+1}$ rises with the marginal value of meeting sales $Y_{s,t+1}$, the equilibrium $\theta_{s,t}$ is increasing in the target $L^\ast_{s,t+1}$.
+
+\paragraph{Step 4 (Choose vacancies to meet the target).} Hiring \emph{realizations} obey $H_{s,t}=f_s(\theta_{s,t})U_{s,t}=q_s(\theta_{s,t})v_{s,t}$. Absent hard caps on $v_{s,t}$, choose $v_{s,t}$ so that $H_{s,t}=\Delta L_{s,t+1}$ (equivalently $v_{s,t}=\Delta L_{s,t+1}/q_s(\theta_{s,t})$). Then the stock equation \eqref{eq:employment_stock} delivers $L_{s,t+1}=L^\ast_{s,t+1}$. With installation frictions, one gets partial adjustment and hence \eqref{eq:LT_LN_approx}.
+
+\subsection*{Calibration and Identification Notes}
+\subsubsection*{Enrollment (logit)}
+Pick $(\bar\phi,\sigma_\phi)$ to match baseline enrollment $S/\mu$ and the semi-elasticity of enrollment to aid (or labor conditions):
+\[
+\frac{\partial S}{\partial s}=\mu\,\frac{\lambda(\iota)}{\sigma_\phi},\qquad \lambda(\iota)=\frac{S}{\mu}\Big(1-\frac{S}{\mu}\Big).
+\]
+A normalization $\iota=0$ at baseline (median indifferent) gives $\lambda(0)=1/4$ and $\sigma_\phi=\mu/(4\,\partial S/\partial s)$.
+
+\subsubsection*{Matching block}
+Calibrate $(m_s,\alpha,c_s,\delta_s,\xi_s)$ from vacancy–unemployment–hires micro moments and wage cyclicality. Clamp $f_s,q_s\in(0,1]$ at the simulation frequency.
+
+\subsubsection*{Technology and exposure}
+Set $\phi_T=1/A_T$. Let $a(x)=1/A_N(x)$ increase with exposure if the sectoral mix is more labor-intensive near universities. The local multiplier $k(x)=a(x)/\big(1-a(x)\eta(x)\bar w\big)$ follows.
+
+\subsubsection*{Presence and closures}
+Specify $\rho_t$ (near one normally, collapses with remote instruction) and $\chi_t$ (closure intensity), with convex exposure hit $\propto x^\psi$.
+
+\subsection*{Equilibrium Definition}
+Given initial stocks $(L_{s,0},U_{s,0})$, exposures $x$, parameter vectors, and shock sequences $(\varepsilon_t,\chi_t,s_t)$, an equilibrium is a sequence
+\[
+\big\{S_t,\,G_t,\,Y_{T,t},Y_{N,t},\,\theta_{s,t},w_{s,t},\,v_{s,t},\,H_{s,t},\,L_{s,t+1},U_{s,t+1}\big\}_{t\ge 0,s\in\{T,N\}}
+\]
+satisfying: (i) enrollment \eqref{eq:logit_St_main}; (ii) university demand \eqref{eq:G_def_main}; (iii) goods demand \eqref{eq:YT_demand}, \eqref{eq:YN_demand}; (iv) free entry \eqref{eq:free_entry} and wage bargaining \eqref{eq:wage_rule}; (v) matching hazards \eqref{eq:f_q_defs}; (vi) stock evolution \eqref{eq:employment_stock}–\eqref{eq:unemployment_stock}. The unemployment rate is given by \eqref{eq:urate_def}.
+
+\subsection*{Findings (Comparative Statics)}
+\begin{itemize}
+	\item \textbf{Standard recessions ($\chi_t=0$):} $S_t$ rises via \eqref{eq:logit_derivs}, $G_t$ rises proportionally to $x g_1\rho_tS_t$, cushioning $L_{N,t}$ through $k(x)$ and raising $\theta_{N,t}$, so $f_N$ rises relative to a low-$x$ county; $u_t$ increases less at higher $x$.
+	\item \textbf{Closure episodes ($\Delta\chi>0$ and $\rho_t\downarrow$):} the $x^\psi$ term dominates for sufficiently large $x$ and low $\rho_t$, reversing the sign of the exposure gradient in unemployment responses.
+\end{itemize}
+
+
+\section*{ A2 - Model simulation kit}
+
+\subsection*{Simulation Guide for the Search--Matching Model (with Exposure, Enrollment, and Closures)}
+
+\subsubsection*{Modes of Simulation}
+\begin{itemize}
+	\item \textbf{Mode A (Reduced-form $k$-model):} Uses the closed-form N-sector fixed point
+	\[
+	L_{N,t}=k(x)\big[\eta(x)\,\bar w\,L_{T,t}+G_t(x)\big],\qquad
+	k(x)=\frac{a(x)}{1-a(x)\eta(x)\bar w}.
+	\]
+	\item \textbf{Mode B (Full S-M structural):} Simulates vacancies, tightness, hiring, wages from free entry and Nash bargaining:
+	\(
+	\{v_{s,t},\theta_{s,t},H_{s,t},w_{s,t}\}_{s\in\{T,N\}}.
+	\)
+\end{itemize}
+
+\subsection*{1.\ Parameters to Provide}
+
+\subsubsection*{1.1\ Common (both modes)}
+\begin{itemize}
+	\item \textbf{Exposure \& locality:} $x\in[0,1]$,\quad $\rho_t(x)\in[0,1]$ (path or rule).
+	\item \textbf{University demand:} $g_0>0,\ g_1>0,\ \psi\ge 1$;\quad closure shock path $\{\chi_t\}_{t=0}^T$.
+	\item \textbf{Shocks/policy:} national demand shock $\{\varepsilon_t\}_{t=0}^T$;\quad aid/stipend $\{s_t\}_{t=0}^T$ (optional).
+	\item \textbf{Resident spending \& wages:} $\eta(x)\in(0,1)$,\quad $\bar w>0$.
+	\item \textbf{Tradables:} $\bar Y_T>0,\ \beta_T>0$ with $Y_{T,t}=\bar Y_T+\beta_T\varepsilon_t$;\quad labor requirement $\phi_T>0$.
+	\item \textbf{Enrollment block:} $\beta\in(0,1)$; cost distribution $F(\phi)$ and cohort size $\mu>0$; graduate premium $\kappa_s\ge 0$ (and/or job-finding advantage $\lambda_s\ge 0$); worker outside option $b$.
+	\item \textbf{Initial conditions:} $L_{T,0},L_{N,0}$ (or steady values).
+\end{itemize}
+
+\subsubsection*{1.2\ Extra for Mode A}
+\begin{itemize}
+	\item \textbf{Services intensity:} $a(x)>0$ (constant or increasing in $x$).
+	\item \textbf{Local multiplier:} provide $k(x)$ directly or compute from $a(x),\eta(x),\bar w$ via
+	\(k(x)=\frac{a(x)}{1-a(x)\eta(x)\bar w}\).
+\end{itemize}
+
+\subsubsection*{1.3\ Extra for Mode B}
+\begin{itemize}
+	\item \textbf{Matching:} $m_s>0,\ \alpha\in(0,1)$,\quad separations $\delta_s\in(0,1)$,\quad vacancy costs $c_s>0$.
+	\item \textbf{Bargaining \& wages:} worker weight $\xi_s\in(0,1)$,\quad revenue-per-worker mapping $R'_{s,t}$ (proportional to sales per worker).
+	\item \textbf{Initial LM state:} $L_{s,0}$ and either $\theta_{s,0}$ or $v_{s,0}$, for $s\in\{T,N\}$.
+\end{itemize}
+
+\subsection*{2.\ Functions to Define}
+
+\subsubsection*{2.1\ Common (both modes)}
+\begin{itemize}
+	\item \textbf{Tradables demand and labor:}
+	\[
+	Y_T(\varepsilon_t)=\bar Y_T+\beta_T\varepsilon_t,\qquad
+	L_T(Y_T)=\phi_T\,Y_T.
+	\]
+	\item \textbf{Enrollment (Study vs Work):}
+	\[
+	\phi_t^\star = s_t+\beta\,\mathbb{E}_t[V^G_{t+1}] - V^W_t,\qquad
+	S_t=\mu\,F(\phi_t^\star).
+	\]
+	Here $V^W_t=\max\{V^T_t,V^N_t\}$ depends on job-finding, wages, and continuation values; in Mode A you may proxy $V^W_t$ as a function of $U_t$ or $-\varepsilon_t$ calibrated to match countercyclicality.
+	\item \textbf{University spending with exposure/locality:}
+	\[
+	G_t(x)=x\,g_0 + x\,g_1\,\rho_t(x)\,S_t - \chi_t\,x^{\psi}.
+	\]
+	\item \textbf{Resident N-spending:}
+	\[
+	E^{\mathrm{res}}_{N,t}=\eta(x)\,\bar w\,(L_{T,t}+L_{N,t}).
+	\]
+	\item \textbf{N-goods market:}\quad $Y_{N,t}=E^{\mathrm{res}}_{N,t}+G_t(x)$.
+	\item \textbf{Accounting:}\quad $L_{E,t}=L_{T,t}+L_{N,t}$,\quad $U_t=\bar L - L_{E,t}$.
+\end{itemize}
+
+\subsubsection*{2.2\ Mode A (Reduced-form $k$) specific}
+\begin{itemize}
+	\setcounter{enumi}{6}
+	\item \textbf{N employment fixed point:}
+	\[
+	L_{N,t}=k(x)\,\big[\eta(x)\,\bar w\,L_{T,t}+G_t(x)\big],\qquad
+	a_T(x)\equiv 1+k(x)\eta(x)\bar w,\quad
+	L_{E,t}=a_T(x)\,L_{T,t}+k(x)\,G_t(x).
+	\]
+\end{itemize}
+
+\subsubsection*{2.3\ Mode B (Full S--M) specific}
+\begin{itemize}
+	\setcounter{enumi}{7}
+	\item \textbf{Matching (per sector $s$):}
+	\[
+	f_s(\theta)=m_s\,\theta^{\,1-\alpha},\qquad
+	q_s(\theta)=m_s\,\theta^{-\alpha},\qquad
+	H_s=q_s(\theta_s)\,v_s.
+	\]
+	\item \textbf{Worker values:}
+	\[
+	E_s=w_s+\beta\,\mathbb{E}[(1-\delta_s)E_s'+\delta_s U_s'],\quad
+	U_s=b+\beta\,\mathbb{E}[f_s(\theta_s)E_s'+(1-f_s(\theta_s))U_s'].
+	\]
+	\item \textbf{Firm/job values and free entry:}
+	\[
+	J_s=R'_s-w_s+\beta\,\mathbb{E}[(1-\delta_s)J_s'],\qquad
+	0=-c_s+\beta\,\mathbb{E}[q_s(\theta_s)\,J_s'].
+	\]
+	\item \textbf{Nash wage (surplus split):}
+	\[
+	w_s=(1-\xi_s)\,b+\xi_s\Big(R'_s+\beta\,\mathbb{E}[(1-\delta_s)J_s']+c_s\,\theta_s\Big).
+	\]
+	\item \textbf{Revenue per worker:}\; $R'_T\propto Y_T/L_T$ (small open, price fixed),\; $R'_N\propto Y_N/L_N$ (prices near-sticky).
+	\item \textbf{Employment law of motion:}\; $L_{s,t+1}=(1-\delta_s)L_{s,t}+H_{s,t}$.
+	\item \textbf{Targets (useful numerically):}\; $L_T^\star=\phi_T\,Y_T$,\; $L_N^\star=a(x)\,Y_N$; choose $v_s$ (hence $\theta_s$) so $L_s\to L_s^\star$ given $(q_s,\delta_s)$.
+\end{itemize}
+
+\subsection*{3.\ Minimal Simulation Loops}
+
+\subsubsection*{3.1\ Mode A (fast policy/episode sweeps)}
+For $t=0,\ldots,T$:
+\begin{enumerate}
+	\item $Y_{T,t}=\bar Y_T+\beta_T\varepsilon_t$;\quad $L_{T,t}=\phi_T Y_{T,t}$.
+	\item Compute (or proxy) $V^W_t$;\quad $\phi_t^\star=s_t+\beta\,\mathbb{E}[V^G_{t+1}]-V^W_t$;\quad $S_t=\mu\,F(\phi_t^\star)$.
+	\item $G_t(x)=x g_0+x g_1 \rho_t(x) S_t-\chi_t x^{\psi}$.
+	\item $L_{N,t}=k(x)\,[\eta(x)\bar w L_{T,t}+G_t(x)]$.
+	\item $L_{E,t}=L_{T,t}+L_{N,t}$;\quad $U_t=\bar L-L_{E,t}$.
+\end{enumerate}
+
+\subsubsection*{3.2\ Mode B (structural vacancies/tightness/wages)}
+For $t=0,\ldots,T$:
+\begin{enumerate}
+	\item $Y_{T,t}=\bar Y_T+\beta_T\varepsilon_t$;\quad $L_T^\star=\phi_T Y_{T,t}$.
+	\item Enrollment: compute $V^W_t$ from last period's $\{\theta_s,w_s\}$; then $\phi_t^\star$ and $S_t$. University demand: $G_t(x)$; N-demand: $Y_{N,t}=\eta(x)\bar w(L_{T,t}+L_{N,t})+G_t(x)$;\quad $L_N^\star=a(x)Y_{N,t}$.
+	\item \textbf{Free entry + Nash:} solve $\{\theta_T,\theta_N,w_T,w_N\}$ from firm/worker value equations and wage rule given $R'_s$ (which depend on $Y_s/L_s$). Numerically: choose $v_s$ so $L_s$ moves toward $L_s^\star$ given $(q_s,\delta_s)$ and recompute until convergence.
+	\item Update employment: $L_{s,t+1}=(1-\delta_s)L_{s,t}+q_s(\theta_{s,t})v_{s,t}$.
+	\item Aggregates: $L_{E,t}=L_{T,t}+L_{N,t}$,\quad $U_t=\bar L-L_{E,t}$; store $\{v_s,\theta_s,H_s,w_s\}$.
+\end{enumerate}
+
+\subsection*{4.\ Outputs and Calibration Targets}
+\begin{itemize}
+	\item \textbf{Common outputs:} $\{U_t,L_{N,t},L_{T,t},S_t,G_t\}$;\; treatment effect $\tau(x)$ by episode;\; exposure gradients.
+	\item \textbf{Mode B extras:} $\{v_s,\theta_s,H_s,w_s\}$; match vacancy/tightness data, hires/unemp ratios, wage cyclicality.
+\end{itemize}
+
+\subsection*{5.\ Quick Default Values (illustrative)}
+\begin{itemize}
+	\item \textbf{Matching:} $\alpha=0.5$, $m_N=0.6$, $m_T=0.5$, $\delta_N=\delta_T=0.03$, $c_N=c_T=0.2$.
+	\item \textbf{Bargaining:} $\xi_N=0.6$, $\xi_T=0.5$;\; $b=0.4\,\bar w$.
+	\item \textbf{Spending/tech:} $\bar w=1$;\; $a(x)=0.35+0.25x$;\; $\eta(x)=0.25+0.10x$.
+	\item \textbf{University:} $g_0=0.2$, $g_1=0.8$, $\psi=1.4$;\; $\rho_t(x)=0.8+0.15x$ (Covid drop $\approx 0.2$).
+	\item \textbf{Exposure:} $x\in\{0.05,0.15,0.35,0.60\}$.
+	\item \textbf{Shocks:} $\varepsilon_{2001}\approx -0.2$, $\varepsilon_{2008}\approx -1.2$, $\varepsilon_{2020}\approx -1.5$;\; $\chi_{2020}>0$ else $0$.
+\end{itemize}
+
+\subsection*{6.\ TL;DR Checklists}
+\paragraph{Provide (all runs):}
+\[
+\{x,\rho_t(x),g_0,g_1,\psi\},\quad
+\{\varepsilon_t,\chi_t,s_t\},\quad
+\{\eta(x),\bar w,\bar Y_T,\beta_T,\phi_T\},\quad
+\{\beta,F,\mu,\kappa_s,\lambda_s,b\},\quad
+\text{initials }(L_{T,0},L_{N,0}).
+\]
+\paragraph{Define (common):}
+\[
+Y_T,\ L_T,\ S_t,\ G_t,\ E^{\mathrm{res}}_N,\ Y_N,\ L_E,\ U.
+\]
+\paragraph{Then choose:}
+\begin{itemize}
+	\item \textbf{Mode A:} $L_{N,t}=k(x)[\eta \bar w L_{T,t}+G_t]$ (fast).
+	\item \textbf{Mode B:} matching $\{f,q\}$,\; values $\{E,U,J\}$,\; wage rule,\; free entry,\; $L_{s,t+1}$ (structural).
+\end{itemize}
+

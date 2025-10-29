@@ -1,0 +1,252 @@
+# ---------------------------------------------------------------------------- #
+# Title: Universities as Macro-Stabilizers                                     #
+# Author: Sebastian Sanin-Restrepo                                             #
+# Code description: This is the main script that call all functions to obtain  #
+#                   the output figures and tables in the document.             #
+# ---------------------------------------------------------------------------- #
+
+# Incremental update (baseline 1990–2024 + rolling 2025–2029)
+
+# 0 - Load metadata once (as in your working script) ----
+area_type <- readRDS("data/BLSmeta/la_area_type.rds") |> as.data.table()
+area      <- readRDS("data/BLSmeta/la_area.rds"     ) |> as.data.table()
+measure   <- readRDS("data/BLSmeta/la_measure.rds"  ) |> as.data.table()
+period_md <- readRDS("data/BLSmeta/la_period.rds"   ) |> as.data.table()
+seasonal  <- readRDS("data/BLSmeta/la_seasonal.rds" ) |> as.data.table()
+series_md <- readRDS("data/BLSmeta/la_series.rds"   ) |> as.data.table()
+srd       <- readRDS("data/BLSmeta/la_srd.rds"      ) |> as.data.table()
+
+setkey(area_type, area_type_code)
+setkey(area,      area_code)
+setkey(measure,   measure_code)
+setkey(period_md, period)
+setkey(seasonal,  seasonal_code)
+setkey(series_md, series_id)
+setkey(srd,       srd_code)
+
+# 1 - Helpers (parser + standardizer) ----
+parse_la_series_id <- function(x) {
+  x <- trimws(x)
+  if (any(nchar(x) != 20L)) stop("All series_id must have length 20.")
+  data.table(
+    survey        = substr(x, 1, 2),
+    seasonal_code = substr(x, 3, 3),
+    area_code     = substr(x, 4, 18),
+    measure_code  = substr(x, 19, 20)
+  )
+}
+
+coerce_and_select_schema <- function(DT) {
+  # Use the same column set/types every time to keep schemas aligned
+  keep_cols <- c(
+    "series_id","survey","seasonal_code","area_code","measure_code","area_type_code",
+    "year","period","month","value",
+    "area_text","series_title","measure_text","areatype_text","seasonal",
+    "begin_year","begin_period","end_year","end_period","srd_code","srd_text"
+  )
+  keep_cols <- intersect(keep_cols, names(DT))
+  DT <- DT[, ..keep_cols]
+  
+  char_cols <- intersect(c("series_id","survey","seasonal_code","area_code","measure_code",
+                           "area_type_code","period",
+                           "area_text","series_title","measure_text","areatype_text","seasonal",
+                           "begin_period","end_period","srd_code","srd_text"),
+                         names(DT))
+  int_cols  <- intersect(c("year","month","begin_year","end_year"), names(DT))
+  dbl_cols  <- intersect(c("value"), names(DT))
+  
+  for (cc in char_cols) DT[, (cc) := as.character(get(cc))]
+  for (cc in int_cols)  DT[, (cc) := as.integer(get(cc))]
+  for (cc in dbl_cols)  DT[, (cc) := as.numeric(get(cc))]
+  
+  DT
+}
+
+# 2 - Process the 2025–2029 raw file into "updates" parquet (monthly/annual) ----
+process_updates_2529 <- function(
+    raw_path_2529 = "data/BLSraw/bls_la.data.0.CurrentU25-29",
+    out_dir_month_updates  = "data/BLSprocessed/monthly_updates_25_29",
+    out_dir_annual_updates = "data/BLSprocessed/annual_updates_25_29"
+) {
+  DT <- utils::read.delim(raw_path_2529, sep = "\t", quote = "", stringsAsFactors = FALSE, header = TRUE)
+  setDT(DT)
+  
+  DT[, series_id := gsub(" ", "", trimws(series_id))]
+  parts <- parse_la_series_id(DT$series_id)
+  DT[, c("survey","seasonal_code","area_code","measure_code") := parts]
+  DT[, month := as.integer(sub("^M", "", period))]
+  DT[period == "M13", month := NA_integer_]
+  
+  # --- metadata joins ---
+  setkey(DT, measure_code);  DT <- measure[DT]
+  setkey(DT, seasonal_code); DT <- seasonal[DT]
+  setkey(DT, area_code);     DT <- area[, .(area_type_code, area_code, area_text)][DT]
+  setkey(DT, area_type_code);DT <- area_type[DT]
+  setkey(DT, period);        DT <- period_md[DT]
+  setkey(DT, series_id);     DT <- series_md[, .(series_id, srd_code, series_title, begin_year, begin_period, end_year, end_period)][DT]
+  setkey(DT, srd_code);      DT <- srd[DT]
+  
+  DT <- coerce_and_select_schema(DT)
+  
+  # split & write (overwrite the updates folders each run)
+  DT_month  <- DT[period != "M13"]
+  DT_annual <- DT[period == "M13"]
+  
+  unlink(out_dir_month_updates,  recursive = TRUE, force = TRUE)
+  unlink(out_dir_annual_updates, recursive = TRUE, force = TRUE)
+  dir.create(out_dir_month_updates,  recursive = TRUE, showWarnings = FALSE)
+  dir.create(out_dir_annual_updates, recursive = TRUE, showWarnings = FALSE)
+  
+  write_parquet(DT_month,  file.path(out_dir_month_updates,  paste0(basename(raw_path_2529), ".parquet")))
+  write_parquet(DT_annual, file.path(out_dir_annual_updates, paste0(basename(raw_path_2529), ".parquet")))
+}
+
+# 3 - Combine baseline (<=2024) with updates (>=2025) into a NEW versioned output ----
+combine_baseline_with_updates <- function(
+    baseline_month_dir  = "data/BLSprocessed/monthly_parquet",
+    baseline_annual_dir = "data/BLSprocessed/annual_parquet",
+    updates_month_dir   = "data/BLSprocessed/monthly_updates_25_29",
+    updates_annual_dir  = "data/BLSprocessed/annual_updates_25_29",
+    out_month_dir_root  = "data/BLSprocessed/combined_monthly_parquet",
+    out_annual_dir_root = "data/BLSprocessed/combined_annual_parquet"
+) {
+  # open datasets (unified schema)
+  ds_base_m <- open_dataset(baseline_month_dir,  format = "parquet", unify_schemas = TRUE)
+  ds_base_a <- open_dataset(baseline_annual_dir, format = "parquet", unify_schemas = TRUE)
+  ds_up_m   <- open_dataset(updates_month_dir,   format = "parquet", unify_schemas = TRUE)
+  ds_up_a   <- open_dataset(updates_annual_dir,  format = "parquet", unify_schemas = TRUE)
+  
+  # filter baseline to <=2024, updates to >=2025; union_all keeps latest 2025+ fully
+  combo_m <- ds_base_m %>%
+    filter(year <= 2024) %>%
+    union_all(ds_up_m %>% filter(year >= 2025))
+  
+  combo_a <- ds_base_a %>%
+    filter(year <= 2024) %>%
+    union_all(ds_up_a %>% filter(year >= 2025))
+  
+  # versioned output dirs (e.g., by YYYYMMDD)
+  stamp <- format(Sys.Date(), "%Y%m%d")
+  out_month_dir  <- file.path(out_month_dir_root,  paste0("v", stamp))
+  out_annual_dir <- file.path(out_annual_dir_root, paste0("v", stamp))
+  
+  # write partitioned datasets (fast; no giant in-memory collect)
+  # overwrite version folder if re-run same day
+  unlink(out_month_dir,  recursive = TRUE, force = TRUE)
+  unlink(out_annual_dir, recursive = TRUE, force = TRUE)
+  
+  write_dataset(combo_m, out_month_dir,  format = "parquet", existing_data_behavior = "overwrite")
+  write_dataset(combo_a, out_annual_dir, format = "parquet", existing_data_behavior = "overwrite")
+  
+  message("Wrote combined monthly to: ", out_month_dir)
+  message("Wrote combined annual  to: ", out_annual_dir)
+  
+  invisible(list(month_dir = out_month_dir, annual_dir = out_annual_dir))
+}
+
+
+# 4 - Combine them all ----
+  # Rebuild the updates parquet from the new 25-29 raw file
+  process_updates_2529("data/BLSraw/bls_la.data.0.CurrentU25-29")
+
+  # Combine baseline (<=2024) + updates (>=2025) into a NEW versioned folder
+  paths <- combine_baseline_with_updates()
+
+  
+# 5 - Check exercise ----
+  
+  ds_month  <- open_dataset("data/BLSprocessed/combined_monthly_parquet", format = "parquet", unify_schemas = TRUE)
+  
+  seasonal_pref <- "U"  # "S" (adjusted), "U" (unadjusted), or NULL for both
+  
+  df_states <- ds_month %>%
+    filter(
+      measure_code == "03",
+      area_type_code == "A",
+      year >= 1990, year <= 2025
+    ) %>%
+    { if (is.null(seasonal_pref)) . else filter(., seasonal_code == seasonal_pref) } %>%
+    mutate(
+      date  = as.Date(paste0(year,"-", month, "-01"),format="%Y-%m-%d"),
+      value = cast(value, float64(), safe = FALSE)
+    ) %>%
+    select(area_text, area_code, date, value) %>%
+    collect()
+  
+  # Plot (faceted by state)
+  p <- ggplot(df_states, aes(date, as.numeric(value), group = area_code)) +
+    geom_line(linewidth = 0.3) +
+    facet_wrap(~ area_text, ncol = 6, scales = "free_y") +
+    scale_x_date(labels = date_format("%Y"), breaks = pretty_breaks(6)) +
+    labs(
+      title = "Unemployment Rate by State (1990–2024)",
+      subtitle = if (is.null(seasonal_pref)) "Seasonal: All"
+      else if (seasonal_pref == "S") "Seasonally Adjusted"
+      else "Not Seasonally Adjusted",
+      x = NULL, y = "Percent",
+      caption = "Source: BLS LAUS"
+    ) +
+    theme_minimal(base_size = 10) +
+    theme(panel.grid.minor = element_blank(),
+          strip.text = element_text(size = 8),
+          plot.title = element_text(face = "bold"))
+  
+  print(p)
+  
+# 6 - Create final dataset monthly by county ----
+  
+  ds_month  <- open_dataset("data/BLSprocessed/combined_monthly_parquet", format = "parquet", unify_schemas = TRUE)
+  
+  
+  df_counties <- ds_month %>%
+    filter(
+      measure_code == "03",
+      area_type_code == "F",
+      year >= 1990, year <= 2025
+    ) %>%
+    { if (is.null(seasonal_pref)) . else filter(., seasonal_code == seasonal_pref) } %>%
+    mutate(
+      date  = as.Date(paste0(year,"-", month, "-01"),format="%Y-%m-%d"),
+      value = cast(value, float64(), safe = FALSE)
+    ) %>%
+    collect()
+  
+  # --- cross-county distribution per state-month ---
+  q_by_state <- df_counties %>%
+    group_by(srd_text, date) %>%
+    summarize(
+      q05 = quantile(value, 0.05, na.rm = TRUE),
+      q32 = quantile(value, 0.32, na.rm = TRUE),
+      q50 = quantile(value, 0.50, na.rm = TRUE),
+      q68 = quantile(value, 0.68, na.rm = TRUE),
+      q95 = quantile(value, 0.95, na.rm = TRUE),
+      .groups = "drop"
+    )
+  
+  
+  # --- plot ribbons: 5–95 (lighter), 32–68 (darker), median line ---
+  p <- q_by_state %>% filter(srd_text%in%c("Texas","New York","California","Florida",
+                                           "Illinois","Pennsylvania","Utah")) %>% ggplot( aes(x = date)) +
+    geom_ribbon(aes(ymin = q05, ymax = q95), alpha = 0.20) +
+    geom_ribbon(aes(ymin = q32, ymax = q68), alpha = 0.35) +
+    geom_line(aes(y = q50), linewidth = 0.35) +
+    facet_wrap(~ srd_text, ncol = 3, scales = "free_y") +
+    scale_x_date(labels = date_format("%Y"), breaks = pretty_breaks(6)) +
+    labs(
+      title = "Distribution of County Unemployment Rates by State",
+      subtitle = sprintf("%d–%d (%s)", 1990, 2025,
+                         if (is.null(seasonal_pref)) "All seasonal statuses"
+                         else if (seasonal_pref == "S") "Seasonally Adjusted"
+                         else "Not Seasonally Adjusted"),
+      x = NULL, y = "Percent",
+      caption = "Source: BLS LAUS; ribbons show 5–95 and 32–68 quantile bands; line is median."
+    ) +
+    theme_minimal(base_size = 10) +
+    theme(panel.grid.minor = element_blank(),
+          strip.text = element_text(size = 8),
+          plot.title = element_text(face = "bold"))
+  
+  print(p)
+  
+  
+
