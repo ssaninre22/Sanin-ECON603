@@ -164,8 +164,8 @@ pythontex-files-*/
 ## Test
 
 # Other weird extension files
-**/data/
-**/trash/
-**/.Rproj.user/
-
+data/
+trash/
+.Rproj.user/
+*.Rproj.user
 
