@@ -11,10 +11,9 @@
 
 \noindent The empirical analysis proceeds through three complementary exercises. First, a synthetic difference-in-differences (SDID) framework estimates the average effect of national recessions on high-exposure counties relative to other counties, addressing the potential failure of parallel pre-trends. Second, an interaction difference-in-differences and a local projections approach exploit the continuous exposure measure to quantify the magnitude and dynamics of the exposure–response relationship. Third, an event-study framework focuses on the 2020 campus shutdown to examine how the stabilizing role of universities reverses when in-person activity collapses. Together, these methods provide a consistent assessment of both the stabilizing and fragility channels identified in the conceptual framework.
 
-\paragraph{Synthetic difference-in-differences.}  
-The SDID design serves as the primary identification strategy to estimate how recessions affect highly university-dependent counties relative to less exposed ones. I use SDID because it directly addresses two limitations of the standard difference-in-differences estimator: first, the parallel-trends assumption may not hold across exposure groups, as documented by \citet{jumpResearchUniversitiesRecession} for the 2001 recession; and second, the treatment in this context—the recession—is a national shock that affects all counties, with heterogeneity arising from pre-existing exposure to universities. Following \citet{arkhangelsky2021synthetic}, SDID constructs unit weights $(\omega_i)$ and time weights $(\lambda_t)$ that align the pre-recession trajectories of treated (college-town) and control counties. This procedure produces a counterfactual path that reproduces what would have happened in highly exposed counties had they not been disproportionately affected by the recession.
+\noindent \textbf{Synthetic difference-in-differences.} The SDID design serves as the primary identification strategy to estimate how recessions affect highly university-dependent counties relative to less exposed ones. I use SDID because it directly addresses two limitations of the standard difference-in-differences estimator. First, the parallel-trends assumption may not hold across exposure groups, as documented by \citet{jumpResearchUniversitiesRecession} for the 2001 recession; and second, the treatment in this context, a recession, is a national shock that affects all counties, with heterogeneity arising from pre-existing exposure to universities. Following \citet{arkhangelsky2021synthetic}, SDID constructs unit weights $(\omega_i)$ and time weights $(\lambda_t)$ that align the pre-recession trajectories of treated (college-town) and control counties. This procedure produces a counterfactual path that reproduces what would have happened in highly exposed counties had they not been disproportionately affected by the recession.
 
-\noindent Formally, for each NBER-defined recession period $\mathcal{T} = [t_0-L, \ldots, t_1]$, I estimate
+Formally, for each NBER-defined recession period $\mathcal{T} = [t_0-L, \ldots, t_1]$, I estimate
 \begin{equation}
 	\label{eq:sdid_reg}
 	\hat{\delta}_{\mathrm{SDID}}
@@ -29,49 +28,53 @@ The SDID design serves as the primary identification strategy to estimate how re
 		\omega_i\,\lambda_t, & i\in \mathcal{I}^{C}
 	\end{cases}
 \end{equation}
+
 where $\text{Recession}_t$ is an indicator equal to one during months classified by the NBER as recessionary, $D_i$ is a binary indicator for high-exposure counties, and the weights $(\omega_i, \lambda_t)$ are chosen to minimize pre-recession discrepancies in outcomes between treated and comparison counties. The coefficient $\delta_{\text{SDID}}$ captures the average difference in recession-period outcomes between high- and low-exposure counties, after controlling for differential pre-trends. The identifying assumption is that, conditional on reweighting, treated and comparison counties would have followed similar trajectories in the absence of a recession. Following \citet{arkhangelsky2021synthetic}, I assess this assumption by examining pre-recession fit, placebo windows, and root-mean-squared pre-error (RMSPE) statistics. 
 
-\noindent The pool of potential control counties includes all counties with lower university exposure, excluding immediate neighbors of college towns to minimize spatial spillovers and ensure independence of outcomes. In some robustness checks, I restrict comparisons to counties within the same state, ensuring that fiscal, policy, and administrative environments are comparable. SDID estimates are reported separately for the 2001, 2008–2009, and 2020 recessions, with standard errors clustered at the state or commuting-zone level.
+The pool of potential control counties includes all counties with lower university exposure, excluding immediate neighbors of college towns to minimize spatial spillovers and ensure independence of outcomes. SDID estimates are reported separately for the 2001, 2008–2009, and 2020 recessions, with standard errors clustered at the state or county level.
 
-\paragraph{Continuous exposure and local projections.}
-While SDID provides a transparent average effect for clearly defined college towns, the degree of exposure varies continuously across counties. To capture this heterogeneity, I estimate an interaction difference-in-differences model of the form:
+\noindent \textbf{Continuous exposure and local projections.} While SDID provides a transparent average effect for clearly defined college towns, the degree of exposure varies continuously across counties. To capture this heterogeneity, I estimate an interaction difference-in-differences model of the form:
 \begin{equation}
 	\label{eq:did}
 	Y_{it} = \alpha_i + \tau_t + \beta \big(\text{Recession}_t \times s_i\big) + X_{it}'\gamma + \varepsilon_{it},
 \end{equation}
+
 where $\alpha_i$ are county fixed effects, $\tau_t$ are time fixed effects, and $X_{it}$ includes time-varying demographic and structural controls. The coefficient $\beta$ measures how university exposure modifies the local response to recessions. A negative $\beta$ for unemployment or payroll losses indicates that more university-dependent counties experience smaller downturns, consistent with the stabilizing effect of higher education institutions. The identifying assumption is that, conditional on fixed effects and controls, high- and low-exposure counties would have experienced similar cyclical patterns in the absence of exposure differences. To verify this, I plot pre-recession leads and include flexible exposure-specific pre-trend terms as robustness checks.
 
-\noindent To analyze dynamic adjustment and recovery, I extend equation (\ref{eq:did}) using local projections \citep{Jorda2005LP}. For each horizon $h$ following the start of a recession $t_0$, the specification is:
+To analyze dynamic adjustment and recovery, I extend equation (\ref{eq:did}) using local projections \citep{Jorda2005LP}. For each horizon $h$ following the start of a recession $t_0$, the specification is:
 \begin{equation}
 	\label{eq:lp}
 	\Delta^h Y_{i,t_0+h} = \alpha_i + \kappa_h + \sum_{j=-L}^{H}\beta_{h,j}\,\mathbf{1}\{t=j\}\cdot s_i + X_{it_0}'\gamma_h + u_{i,t_0+h},
 \end{equation}
+
 where $\Delta^h Y_{i,t_0+h}$ is the cumulative $h$-period change in $Y$, $\kappa_h$ are horizon fixed effects, and $\beta_{h,j}$ trace the evolution of outcomes by exposure across event time. These coefficients generate exposure-specific impulse-response functions, allowing me to compare both the depth of the contraction and the speed of recovery across counties with different levels of university dependence.
 
-\paragraph{Event study: the 2020 shutdown.}
-The third exercise examines the COVID-19 university shutdown, which offers a unique setting in which the stabilizing influence of universities was interrupted by the suspension of in-person activity. To evaluate this fragility channel, I estimate an event-time model that interacts exposure with the timing of the shutdown:
+\noindent \textbf{Event study: the 2020 shutdown.} The third exercise examines the COVID-19 university shutdown, which offers a unique setting in which the stabilizing influence of universities was interrupted by the suspension of in-person activity. To evaluate this fragility channel, I estimate an event-time model that interacts exposure with the timing of the shutdown:
 \begin{equation}
 	\label{eq:event}
 	Y_{it} = \alpha_i + \tau_t + \sum_{k\neq -1}\delta_k\,\mathbf{1}\{t=k\}\cdot s_i + X_{it}'\gamma + \varepsilon_{it},
 \end{equation}
+
 where $\delta_k$ measures the differential effect of exposure at each event month $k$ relative to the pre-shutdown period ($k=-1$). This specification captures how outcomes evolved in highly exposed counties before, during, and after the onset of campus closures. Flat coefficients in the pre-shutdown period validate the identifying assumption of parallel pre-trends, while deviations in the post period quantify the magnitude and persistence of the fragility effect. The graphical presentation of event-time coefficients follows the guidance of \citet{SunAbraham2021EventStudy} to ensure correct inference in the presence of heterogeneous treatment intensity.
 
 \subsection{ Further exercises: mechanisms and spatial spillovers}
 
 \noindent The final part of the analysis investigates mechanisms that explain heterogeneity in resilience across university-dependent economies and explores spatial spillovers to neighboring counties. These extensions shed light on why stabilization varies by local structure and whether the influence of universities extends beyond county boundaries.
 
-\noindent To explore mechanisms, I augment the continuous specification with interactions between exposure and pre-determined local characteristics $Z_i$, such as the share of employment in service sectors or housing supply elasticity:
+To explore mechanisms, I augment the continuous specification with interactions between exposure and pre-determined local characteristics $Z_i$, such as the share of employment in service sectors or housing supply elasticity:
 \begin{equation}
 	\label{eq:mech}
 	Y_{it} = \alpha_i + \tau_t + \beta_1(\text{Recession}_t \times s_i) + \beta_2(\text{Recession}_t \times s_i \times Z_i) + X_{it}'\gamma + \varepsilon_{it}.
 \end{equation}
+
 The parameter $\beta_2$ measures whether the stabilizing or fragility effects of university exposure depend on industrial composition or housing market constraints. A positive $\beta_2$ indicates that certain structures, such as service-oriented economies, strengthen the stabilizing channel, while a negative $\beta_2$ during shutdowns suggests greater vulnerability when universities close. This exercise links aggregate outcomes to sectoral and spatial mechanisms, providing microeconomic insight into the macro patterns observed in the main results.
 
-\noindent Finally, I evaluate potential spatial spillovers by incorporating a spatially weighted measure of neighboring exposure, $\tilde{s}_i = \sum_{j\neq i}w_{ij}s_j$, where weights $w_{ij}$ are based on commuting flows from the LEHD LODES data or inverse geographic distance:
+Finally, I evaluate potential spatial spillovers by incorporating a spatially weighted measure of neighboring exposure, $\tilde{s}_i = \sum_{j\neq i}w_{ij}s_j$, where weights $w_{ij}$ are based on commuting flows from the LEHD LODES data or inverse geographic distance:
 \begin{equation}
 	\label{eq:spill}
 	Y_{it} = \alpha_i + \tau_t + \beta_1(\text{Recession}_t \times s_i) + \beta_2(\text{Recession}_t \times \tilde{s}_i) + X_{it}'\gamma + \varepsilon_{it}.
 \end{equation}
+
 The coefficient $\beta_2$ captures indirect effects on counties adjacent to college towns, reflecting that many university workers and students reside outside the university’s administrative boundaries. To ensure robustness, I also re-estimate the main models excluding neighboring counties (“donut samples”) and apply spatial HAC standard errors as in \citet{conley1999gmm} to correct for spatial correlation.
 
 
