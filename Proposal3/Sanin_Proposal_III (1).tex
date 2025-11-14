@@ -1,0 +1,72 @@
+%Input preamble
+\input{preamble}
+
+\begin{document}
+
+\title{\Large \textbf{ECON 603 - Research Proposal III}}
+
+\author{Sebasti\'an San\'in-Restrepo\thanks{Email: sr.sebastian@tamu.edu.}} 
+\date{\today}
+
+\maketitle
+\thispagestyle{empty} 
+\doublespacing
+\thispagestyle{empty} 
+
+\vspace{-10mm}
+\pagenumbering{arabic}
+
+\doublespacing
+
+\section{ Research question}
+
+\noindent \textbf{Question.} How does local dependence on anchor institutions shape the cyclical sensitivity of small-town economies, particularly in the case of U.S. college towns?
+
+\noindent\textbf{Context.} In the United States, universities increasingly function as ``anchor institutions,"\footnote{Large, place-bound employers whose spending and employment provide local economic stability \citep{Harker2024AnchorReliance,Saxenian1994RegionalAdvantage}.} especially in smaller metropolitan areas and college towns that rely on them for jobs, income, and a sizable share of local GDP. For instance, Ithaca, NY, ranks highest on the Philadelphia Fed’s Anchor Economy Reliance Index, reflecting the outsized role of Cornell University in its local economy \citep{Harker2024AnchorReliance}. College towns are distinctive because their economies revolve around universities: students and faculty sustain housing demand, local consumption, and services, and enrollments tend to rise countercyclically during recessions \citep{BoundTurner2007CohortCrowding}. Yet, despite extensive media coverage highlighting the fragility of these towns under college shutdowns or closures, rigorous evidence on their cyclical dynamics remains scarce.
+
+\noindent\textbf{Contribution.} This project proposes to fill that gap by providing evidence on the stability–fragility tradeoff of university reliance in college towns. It quantifies how dependence on universities can cushion local downturns, through countercyclical enrollment and sustained payrolls, yet expose communities to outsized losses when campus presence is curtailed or institutions close. By clarifying these elasticities, the study informs local choices on higher-education funding, and diversification at a time when many places are doubling down on anchor-based development \citep{Harker2024AnchorReliance}.
+
+\section{ Economic framework and empirical design}
+
+\noindent \textbf{Framework.} Agents include universities, students, local workers, and firms in non-tradable sectors (retail, housing, restaurants). In normal recessions, lower outside wages encourage enrollment growth, boosting local demand and stabilizing employment. By contrast, in college shutdowns, students are removed regardless of labor market conditions, exposing fragility. The key hypothesis is that university-dependent towns experience shallower downturns in normal recessions but sharper contractions when student presence suddenly vanishes.
+
+\noindent \textbf{Empirical design.} I will estimate:
+\begin{enumerate}
+	\item \textbf{Stabilizer effect (normal recessions).} Difference-in-differences comparing outcomes (employment, unemployment, sectoral payrolls, rents) in high- vs. low-university-dependent counties during recessions (2001, 2008–09). University dependence is defined by pre-period student share or payroll share.
+	\item \textbf{Fragility effect (shut-downs and closures).} Event study exploiting March 2020 shut-downs and heterogeneity in reopening modalities across universities. Outcomes include service-sector jobs, small-business survival, foot traffic, and housing markets.
+\end{enumerate}
+Identification relies on variation in pre-period university reliance, national enrollment shifts, and exogenous pandemic shut-down policies. Core assumption: absent university shocks, high- and low-dependence towns would have followed parallel trends.
+
+\section{ Data}
+\noindent The analysis combines public datasets: IPEDS (university enrollment, employment), BLS QCEW (county employment/payrolls), Census/ACS (population, income, student shares), and Zillow (housing prices/rents). University closure/reopening data.
+
+
+
+
+\bigskip
+
+%noindent \textbf{[JLG: This is a really neat idea that could connect with either macro-labor or public economics. I think you could go very general within an framework that includes amenities and housing.]} 
+
+\vspace{3em}
+
+%\noindent \textbf{[AZ: I am intrigued. This is a concrete idea that I think has a lot of potential. I like the modeling ideas. If you can find additional sources of variation to allow for more modeling complexities, that could be helpful too. This is a broad topic, so I think there are lots of potential to find those sources.]}
+
+\singlespacing
+\bibliographystyle{chicago}
+\bibliography{public_library}
+
+\pagebreak
+\renewcommand*{\thepage}{A.\arabic{page}}
+\setcounter{page}{0}
+\setcounter{equation}{0}
+\renewcommand{\theequation}{A.\arabic{equation}}
+\setcounter{section}{0}
+\renewcommand{\thesection}{A.\arabic{section}}
+\renewcommand{\thefigure}{A.\arabic{figure}}
+\setcounter{figure}{0}
+\renewcommand{\thetable}{A.\arabic{table}}
+\setcounter{table}{0}
+\thispagestyle{empty}
+
+
+\end{document}
