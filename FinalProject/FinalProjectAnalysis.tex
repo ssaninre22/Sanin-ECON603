@@ -2,4 +2,106 @@
 % Section: Analysis
 
 \newpage
-\section{ Analysis}
+\section{ Very Preliminary Analysis}
+
+\noindent\textbf{Definitions and caveats for the preliminary exercise.} This preliminary analysis requires a clear definition of what constitutes a ``college town" as well as a justification for the geographic unit of analysis. My preferred approach is to construct an endogenous measure of university presence based on local employment in NAICS 61 (Educational Services) or NAICS 6113 (Colleges and Universities) using the Quarterly Census of Employment and Wages (QCEW). In principle, this would allow me to classify counties or MSAs as college-intensive based on the share of employment directly linked to higher education. However, the publicly available QCEW ``all-in-one" datasets—which aggregate information across geographic areas, industries, and ownership types—suppress industry-level employment for public institutions between 2012 and 2025. Although these data are accessible on the QCEW website through individual queries, compiling them requires downloading each geographic unit separately, which I will undertake in the next stage of the project.
+
+Given these constraints, the current definition of college towns relies on an external classification. Specifically, I use the list developed by \citet{GumprechtBook}, who identifies 305 U.S. cities where enrollment in four-year colleges exceeds 20\% of the local population and that satisfy additional criteria, including an urban-area population under 350,000 and physical separation from larger metropolitan centers. Using this definition as a starting point, I match the institutions identified by Gumprecht to their corresponding cities and then map these cities to counties and MSAs. A county or MSA is classified as a ``college-town" area if it contains at least one institution on this list.
+
+This approach has important limitations. When counties contain multiple cities with heterogeneous industrial structures, the presence of a single college may not adequately characterize the broader county economy; this introduces noise and may dilute true treatment effects. MSAs mitigate some of this problem by better aligning with functional labor markets, but the ideal unit of analysis is arguably the city itself. While unemployment rates can, in principle, be measured at the city level (and I plan to incorporate those data), QCEW employment statistics are only consistently available for MSAs, limiting the degree of geographic refinement. Consequently, I report results for both counties and MSAs, with a strong preference for the latter moving forward.
+
+Finally, there is a substantial difference in sample size under each geographic definition. The county-level analysis covers roughly 3,223 counties and produces approximately 1.1 million observations, while the MSA-level analysis includes about 368 MSAs and yields around 168,000 observations. Incorporating city-level data in future iterations should help preserve granularity and improve the empirical alignment between the conceptual definition of college towns and the measurement of local economic outcomes.
+ 
+\noindent \textbf{Results.} Figure 1 displays seasonally adjusted unemployment rates for college-town and non-college areas, measured at both the county and MSA levels. Across the entire sample period, the median unemployment rate in college-town areas is consistently lower than in their non-college counterparts, a pattern observed using either geographic unit. The interquartile ranges reveal substantial heterogeneity, particularly among non-college areas, which exhibit wider dispersion in unemployment outcomes. The relative gap between the two groups narrows during recessions, including the 2001 and 2008 downturns and the Covid-19 shock, suggesting that the stabilizing role of universities may be weaker than commonly presumed. Nevertheless, for MSAs, the median unemployment rate in college-town areas remains below that of non-college MSAs even at the peak of the Covid-19 crisis, and the county-level patterns are broadly consistent. These results provide little evidence of heightened fragility in college-town labor markets and instead show that, if anything, their cyclical sensitivity resembles that of the broader economy.
+
+\begin{figure}[h!]
+	\centering
+	% -------- First row: Counties --------
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{output/g1county}
+		\caption{Counties: College-Town vs. Non-College Counties}
+		\label{fig:g1county}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{output/g1msa}
+		\caption{MSAs: College-Town vs. Non-College MSAs}
+		\label{fig:g1msa}
+	\end{subfigure}
+	% -------- Main caption + figure footnote --------
+	\caption{Unemployment Rates in College-Town vs. Non-College Areas: Counties and MSAs}
+	\footnotesize
+	\justify
+	\textbf{Note:} The figure displays the median unemployment rate and its interquartile range 
+	(25th–75th percentiles) for college-town and non-college areas. All unemployment 
+	series are seasonally adjusted using a robust STL decomposition after linearly 
+	interpolating missing monthly observations. A ``college-town county" (Panel a) is 
+	defined as any county that hosts at least one accredited college or university, 
+	while a ``college-town MSA" (Panel b) refers to any metropolitan statistical area 
+	with at least one such institution. Shaded regions denote the distribution of 
+	unemployment across areas within each group; solid lines indicate college-town 
+	areas and dotted lines indicate non-college areas. The sample covers 1990–2024.
+	\label{fig:unemprates}
+\end{figure}
+
+Figure 2 presents preliminary event-study estimates of the differential response of unemployment in college-town and non-college areas around NBER recessions. All specifications include county or MSA fixed effects and use robust standard errors clustered at the corresponding geographic level. Panels (a) and (b) report results using counties, while panels (c) and (d) report analogous estimates using MSAs. For each geographic definition, the left column displays results using the full sample and the right column shows estimates excluding the Covid-19 recession.
+
+The county-level results reveal that, in the full sample, college-town counties experience somewhat larger increases in unemployment around recessions than non-college counties (panel a). However, this pattern is almost entirely attributable to the Covid-19 episode: once the pandemic recession is excluded (panel b), the estimated differential effect becomes small and statistically indistinguishable from zero. In contrast, the MSA-level analysis—preferred for the reasons discussed above, shows no statistically meaningful difference in the full sample (panel c), but reveals a negative and statistically significant effect in the pre-Covid specification (panel d). This suggests that, absent the pandemic, college-town MSAs tend to experience slightly smaller increases in unemployment during recessions compared with non-college MSAs, consistent with a modest stabilizing role of university-driven local demand.
+
+
+
+\begin{figure}[h!]
+	\centering
+	% -------- First row: Counties --------
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{output/g2county_all}
+		\caption{Counties – full sample}
+		\label{fig:g2county_all}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{output/g2county_pre}
+		\caption{Counties – Pre-Covid sample}
+		\label{fig:g2county_pre}
+	\end{subfigure}
+	
+	\vspace{0.7em}
+	
+	% -------- Second row: MSAs --------
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{output/g2msa_all}
+		\caption{MSAs – full sample}
+		\label{fig:g2msa_all}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}{0.48\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{output/g2msa_pre}
+		\caption{MSAs – Pre-Covid sample}
+		\label{fig:g2msa_pre}
+	\end{subfigure}
+	% -------- Main caption + figure footnote --------
+	\caption{Event Study: Effect of Recessions on Unemployment in College Towns}
+	\footnotesize
+	\justify
+	\textbf{Note:} Each panel reports event–study estimates of the differential response of the 
+	unemployment rate in college towns relative to non–college counties (top row) 
+	and MSAs (bottom row) around the onset of NBER recessions. 
+	``Full sample" panels use the entire 1990–2024 period, while ``Pre-Covid" panels 
+	exclude observations after December 2019. Estimates are obtained from 
+	specifications that include county/MSA and time fixed effects, control for 
+	seasonality using STL-robust decomposition, and cluster standard errors at the 
+	county/MSA level. Dots show point estimates and vertical bars indicate 95\% 
+	confidence intervals. The vertical dashed line marks the beginning of the 
+	recession. All effects are expressed in percentage points of the unemployment rate.
+	\label{fig:event_study_college_towns}
+\end{figure}
+
+
+
+

@@ -198,22 +198,22 @@ bls_la_update <- function(files = NULL,
 
 
 # Current S and U
-bls_la_update(files = "la.data.1.CurrentS")
-bls_la_update(files = "la.data.2.AllStatesU")
-bls_la_update(files = "la.data.3.AllStatesS")
-bls_la_update(files = "la.data.4.RegionDivisionU")
-bls_la_update(files = "la.data.5.RegionDivisionS")
+  # bls_la_update(files = "la.data.1.CurrentS")
+  # bls_la_update(files = "la.data.2.AllStatesU")
+  # bls_la_update(files = "la.data.3.AllStatesS")
+  # bls_la_update(files = "la.data.4.RegionDivisionU")
+  # bls_la_update(files = "la.data.5.RegionDivisionS")
 
 # Metro, Division, Micro, Combined, County, City
-bls_la_update(files = "la.data.60.Metro")
-bls_la_update(files = "la.data.61.Division")
-bls_la_update(files = "la.data.62.Micro")
-bls_la_update(files = "la.data.63.Combined")
-bls_la_update(files = "la.data.64.County")
-bls_la_update(files = "la.data.65.City")
+  # bls_la_update(files = "la.data.60.Metro")
+  # bls_la_update(files = "la.data.61.Division")
+  # bls_la_update(files = "la.data.62.Micro")
+  # bls_la_update(files = "la.data.63.Combined")
+  # bls_la_update(files = "la.data.64.County")
+  # bls_la_update(files = "la.data.65.City")
 
 # By State
-bls_la_update(files = "la.data.51.Texas")
+  # bls_la_update(files = "la.data.51.Texas")
 
 
 

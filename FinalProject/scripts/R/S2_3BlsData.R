@@ -88,7 +88,7 @@
       combine_df_meta( "CurrentU15-19" )
       combine_df_meta( "CurrentU20-24" )
       
-     cs_data <- df_temp2 %>% filter(grepl("CT4815976000000", series_id, ignore.case = TRUE))
+     #cs_data <- df_temp2 %>% filter(grepl("CT4815976000000", series_id, ignore.case = TRUE))
 
 
 
