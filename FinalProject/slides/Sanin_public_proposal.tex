@@ -1,0 +1,386 @@
+\documentclass[10pt,compress]{beamer}
+%\documentclass[fleqn,xcolor=dvipsnames]{beamer}
+\usetheme{Madrid}
+%\usetheme{Boadilla}
+%\usetheme{default}
+%\usetheme{Warsaw}
+%\usetheme{CambridgeUS}
+%\usetheme{Sybila}
+%\usetheme[hideothersubsections]{Berkeley}
+%\usetheme[hideothersubsections]{PaloAlto}
+%%\usetheme[hideothersubsections]{Goettingen}
+%\usetheme{CambridgeUS}
+%\usetheme{Bergen} % This template has nagivation on the left
+%\usetheme{Frankfurt} % Similar to the default with an extra region at the top.
+
+% Uncomment the following line if you want page numbers and using Warsaw theme%
+%\setbeamertemplate{footline}[page number]
+
+\definecolor{aggiemaroon}{RGB}{80,0,0} % Official RGB code for aggie maroon
+\definecolor{darkergray}{RGB}{28,28,28}
+\definecolor{EconomistBlue}{RGB}{0, 38, 80}
+\definecolor{EconomistBlueoth}{RGB}{2, 38, 77}
+\usecolortheme[named=EconomistBlue]{structure}
+\useoutertheme{shadow}
+\useinnertheme{rounded}
+\setbeamertemplate{navigation symbols}{}
+\setbeamerfont{structure}{family=\rmfamily,series=\bfseries}
+\usefonttheme[stillsansseriftext]{serif}
+
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{graphicx,comment}
+\usepackage[english]{babel}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{multicol}
+\usepackage{hyperref}
+\usepackage{enumerate}
+\usepackage{tikz}
+\usepackage{graphicx}
+\usepackage{bm}
+\usepackage{subcaption}
+\useoutertheme{miniframes}
+\setbeamercolor{section in head/foot}{fg=white,bg=EconomistBlueoth}
+\setbeamerfont*{section in head/foot}{family=\rmfamily,size=\fontsize{6}{8}}
+
+%\setbeamercolor{subsection in head/foot}{fg=white,bg=black}
+
+
+%\usebackgroundtemplate{
+%\tikz\node[opacity=0.025, rotate = 0] {\includegraphics[height=\paperheight,width=\paperwidth]{TAM-Logo.png}};}
+%{\includegraphics[height=1in,width=1in]{TAM-Logo.png}};}
+
+
+
+\title[Texas A\&M University]{Anchor Institutions as Macroeconomic Stabilizers:\\The Case of College Towns}
+
+\author [Sanin-Restrepo]{Sebastian Sanin-Restrepo}
+
+\date[ \today]{\today}
+
+\institute[Texas A\&M U.] % (optional, but mostly needed)
+{Public Economics \\
+ %\includegraphics[scale=0.60]{TAM-Logo1.png} \\ [0.0 cm]
+ }
+
+
+
+
+\begin{document}
+
+\begin{frame}
+\titlepage
+\end{frame}
+
+%\begin{frame}
+%\frametitle{Overview} 
+%\tableofcontents
+%\end{frame}
+
+%-----------------------------------------------------
+\section{Motivation}
+%-----------------------------------------------------
+
+\begin{frame}{Why Study College Towns?}
+	\begin{itemize}
+		\item Universities are large, immobile “anchor institutions” with stable payrolls and countercyclical enrollment.
+		\item They generate strong local linkages: non-tradables, housing, services.
+		\item Yet dependence creates a \textbf{stability-fragility tradeoff}: resilience in normal recessions, vulnerability when campus presence collapses.
+		\item COVID-19 exposed fragility: remote instruction shut down campus economies.
+		\item Goal: \textbf{measure how university dependence shapes local cyclical sensitivity and asymmetric responses across recessions}.
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}{Conceptual Background}
+	\begin{itemize}
+		\item Literature documents:
+		\begin{itemize}
+			\item Long-run development effects of universities (Abel \& Deitz 2012; Berlingieri et al. 2022; Ferhat 2022).
+			\item Countercyclical enrollment + stable payrolls as stabilizers (Betts \& McFarland 1995; Dellas \& Koubi 2003).
+			\item Universities as local demand anchors (Harker et al. 2024; Howard et al. 2024).
+		\end{itemize}
+		\item Closest work: Jump \& Scavette (2024) show flagships stabilize in 2008, but not in 2020.
+		\item This project extends these results:
+		\begin{itemize}
+			\item Beyond flagship universities,
+			\item Multiple recessions,
+			\item Labor, housing, and non-tradables,
+			\item Continuous exposure measure.
+		\end{itemize}
+		\item Relevance:
+			\begin{itemize}
+			\item Policy: Many regions are doubling down on anchor-based development, cities want universities or hospitals.
+			\item Local public finance / planning: If reliance stabilizes usual recessions but amplifies rare shutdowns, towns should plan for that asymmetry.
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+%-----------------------------------------------------
+\section{Research Questions}
+%-----------------------------------------------------
+
+\begin{frame}{Research Questions}
+	\begin{enumerate}
+		\item Do university-dependent cities experience smaller declines in employment, payroll, and housing conditions during recessions?
+		\item Does greater university exposure attenuate or amplify cyclical sensitivity?
+		\item How did the 2020 shutdown alter the stabilizing mechanism?
+		\item What roles do housing tightness, service-sector exposure, and commuting networks play?
+	\end{enumerate}
+\end{frame}
+
+\begin{frame}{Key Hypotheses}
+	\begin{itemize}
+		\item \textbf{H1 (Stabilization):} In ordinary recessions, high university dependence reduces employment losses and unemployment spikes.
+		\item \textbf{H2 (Fragility):} When in-person campus activity collapses, the stabilizing channel reverses.
+		\item \textbf{H3 (Heterogeneity):} Stabilization is stronger in places with:
+		\begin{itemize}
+			\item Larger service sectors,
+			\item Tighter housing markets,
+			\item Higher commuting inflows connected to the university.
+		\end{itemize}
+	\end{itemize}
+\end{frame}
+
+%-----------------------------------------------------
+\section{Data}
+%-----------------------------------------------------
+
+\begin{frame}{Data Overview}
+	\textbf{Time frame:} 1990–2023 (subject to availability). \\
+	\vspace{0.2cm}
+	\begin{itemize}
+		\item \textbf{University exposure:} IPEDS (NCES) - FTE enrollment, payroll, employment (NAICS 61/6113).
+		\item \textbf{Local labor markets:} BLS QCEW - total and sectoral employment/payroll.
+		\item \textbf{Unemployment:} BLS LAUS (county and selected cities).
+		\item \textbf{Housing:} Zillow ZORI rents, FHFA house prices.
+		\item \textbf{Demographics:} ACS + Decennial Census.
+		\item \textbf{Commuting patterns:} LEHD LODES - worker residence/ workplace flows.
+		\item \textbf{Recession periods:} NBER peak–trough dates.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Measuring University Dependence}
+	\begin{itemize}
+		\item \textbf{Continuous exposure measure}:
+		\[
+		s_i = \frac{\text{Higher-ed payroll or employment}}{\text{Total local payroll or employment}}
+		\]
+		\item \textbf{Alternative:} FTE students per capita.
+		\item \textbf{Binary indicator:} “College town” if higher education $\geq$ 20–25\% of local employment.
+		\item \textbf{Gumprecht (2008)}:``\textit{I consider as a college town any city where a college or university and the cultures it creates exert a dominant influence over the character of the town."}. Further measure $\approx$ 20\% pop. are 4-year college students and less than 350,000 people in the "city". (\textbf{This presentation.})
+		\item Robust to alternative thresholds and continuous specifications.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Measuring University Dependence}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.8\linewidth]{map1}
+		\caption*{Figure 1: College Towns in US (Gumprecht, 2008, pg.5)}
+		\label{fig:map1}
+	\end{figure}
+	
+\end{frame}
+
+%-----------------------------------------------------
+\section{Empirical Strategy}
+%-----------------------------------------------------
+
+\begin{frame}{Identification Strategy}
+	\begin{itemize}
+		\item Recessions are national shocks; exposure to universities varies cross-sectionally.
+		\item Use three identification approaches:
+		\begin{enumerate}
+			\item \textbf{Synthetic Difference-in-Differences (SDID)}
+			\item \textbf{Interaction DiD + Local Projections}
+			\item \textbf{Event study of 2020 shutdown}
+		\end{enumerate}
+		\item Core identification assumption:
+		\begin{quote}
+			After reweighting (SDID) or conditioning on fixed effects and pre-trends (DiD/LP), high- and low-exposure counties would follow similar paths absent recession.
+		\end{quote}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{SDID Framework}
+	\begin{itemize}
+		\item For each recession:
+		\[
+		Y_{it} = \alpha_i + \tau_t + \delta \cdot (D_i \times Recession_t) + \varepsilon_{it}
+		\]
+		\item SDID constructs unit and time weights $(\omega_i, \lambda_t)$ to exactly match pre-recession trends of treated and control counties.  
+		\item Recovers causal effect of recessions on high-exposure counties.
+		\item Implemented for 2001, 2008–09, and 2020.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Continuous Exposure DiD}
+	\[
+	Y_{it} = \alpha_i + \tau_t + \beta (Recession_t \times s_i) + X_{it}'\gamma + \varepsilon_{it}
+	\]
+	\begin{itemize}
+		\item $\beta$ = marginal effect of exposure on recession sensitivity.
+		\item Leads/lags used to test pre-trends.
+		\item Add mechanisms:
+		\[
+		Y_{it} = \alpha_i + \tau_t + \beta_1 (Recession_t \times s_i) + \beta_2 (Recession_t \times s_i \times Z_i) + \varepsilon_{it}
+		\]
+		where $Z_i$ = housing elasticity, service sector share, etc.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Local Projections: Dynamic Adjustment}
+	\begin{equation*}
+		\Delta^h Y_{i,t_0+h} = \alpha_i + \kappa_h + \sum_{j=-L}^{H}\beta_{h,j}\,\mathbf{1}\{t=j\}\cdot s_i + X_{it_0}'\gamma_h + u_{i,t_0+h},
+	\end{equation*}
+	
+	\begin{itemize}
+		\item Horizon-specific dynamic responses across exposure levels.
+		\item Compare depth and speed of recovery between high and low exposure counties.
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Event Study: 2020 Shutdown}
+	\[
+	Y_{it} = \alpha_i + \tau_t + \sum_{k \neq -1} \delta_k (1\{t=k\} \cdot s_i) + X_{it}'\gamma + \varepsilon_{it}
+	\]
+	\begin{itemize}
+		\item Captures the collapse of stabilizing channels when campus activity halted.
+		\item Expect positive unemployment effects and negative payroll effects for high-exposure areas.
+	\end{itemize}
+\end{frame}
+
+%-----------------------------------------------------
+\section{Preliminary Evidence}
+%-----------------------------------------------------
+
+\begin{frame}{Unemployment Patterns (1990–2024)}
+	\begin{itemize}
+		\item College-town areas have lower median unemployment than non-college areas (county and MSA level).
+		\item Gap narrows during recessions, suggesting modest stabilization.
+		\item 2020 recession: effect reverses, consistent with fragility.
+	\end{itemize}
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.48\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{../output/g1county}
+			\caption{County level}
+			\label{fig:g1_county}
+		\end{subfigure}
+		\begin{subfigure}{0.48\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{../output/g1msa}
+			\caption{MSA level}
+			\label{fig:g1_msa}
+		\end{subfigure}
+		\caption*{\textbf{Figure 1}: Unemployment by Area and College Town classification}
+		\label{fig:g1_unemployment}
+	\end{figure}
+	
+\end{frame}
+
+\begin{frame}{Event Study Results}
+	\begin{itemize}
+		\item County-level: larger unemployment spikes in college towns in full sample, but effect disappears excluding 2020.
+	\end{itemize}
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.48\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{../output/g2county_all}
+			\caption{Counties – full sample}
+			\label{fig:g2county_all}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.48\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{../output/g2county_pre}
+			\caption{Counties – Pre-Covid sample}
+			\label{fig:g2county_pre}
+		\end{subfigure}
+		\caption*{\textbf{Figure 2}: Event Study: Effect of Recessions on Unemployment in College Towns}
+		\label{fig:g2_event_county}
+	\end{figure}
+	
+\end{frame}
+
+\begin{frame}{Event Study Results}
+	\begin{itemize}
+		\item MSA-level (preferred): no difference in full sample; pre-COVID, college towns slightly more resilient.
+		\item Interpretation: stabilizing effect exists but weak—masked or reversed by 2020.
+	\end{itemize}
+	\begin{figure}[H]
+		\centering
+		\begin{subfigure}{0.48\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{../output/g2msa_all}
+			\caption{MSAs – full sample}
+			\label{fig:g2msa_all}
+		\end{subfigure}
+		\hfill
+		\begin{subfigure}{0.48\textwidth}
+			\centering
+			\includegraphics[width=\linewidth]{../output/g2msa_pre}
+			\caption{MSAs – Pre-Covid sample}
+			\label{fig:g2msa_pre}
+		\end{subfigure}
+		\caption*{\textbf{Figure 2}: Event Study: Effect of Recessions on Unemployment in College Towns}
+		\label{fig:g3_event_msa}
+	\end{figure}
+	
+\end{frame}
+
+
+
+
+%-----------------------------------------------------
+\section{Next Steps}
+%-----------------------------------------------------
+
+\begin{frame}{Next Steps}
+	\begin{itemize}
+		\item Build full exposure measure using QCEW NAICS 6113 extraction.
+		\item Complete SDID estimation for each recession.
+		\item Expand to sectoral and housing outcomes.
+		\item Incorporate commuting-based spatial spillovers (LODES).
+		\item Draft theory section on stability-fragility tradeoff.
+	\end{itemize}
+\end{frame}
+
+
+
+
+
+
+
+
+
+
+
+%\begin{frame}
+%\frametitle{My model}
+%\begin{flushleft}
+%\begin{enumerate}
+%\item Let $X_{i1},\ldots,X_{in}$, $i=1,\ldots,q$, are observations generated from the following model:
+%\item  $X_{ij} \sim N(\mu_i, \sigma_i^2)$, $i=1,\ldots,q$, $j=1,\ldots,n$.
+%\end{enumerate}
+%\end{flushleft} 
+%\end{frame}
+
+
+
+%------------------------------------------------
+
+\begin{frame}{}
+  \centering \Huge
+  \emph{Thank You!}
+\end{frame}
+
+%----------------------------------------------------------------------------------------
+\end{document}
+
+
+
